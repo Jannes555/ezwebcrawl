@@ -1,7 +1,5 @@
 import os
 import requests
-import asyncio
-from proxybroker import Broker
 
 
 def download_page_with_session(url, session_url):
@@ -59,14 +57,6 @@ http://121.156.109.108:8080
 http://123.56.175.31:3128
 http://8.219.97.248:80""")
     return # Temp hardcoded proxies until I've added an automated way
-    create_path_if_not_exists(os.path.dirname(filepath))
-    proxies = asyncio.Queue()
-    broker = Broker(proxies)
-    tasks = asyncio.gather(
-        broker.find(types=types, limit=count),
-        save_proxies_helper(proxies, filepath))
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(tasks)
 
 def load_proxies(filepath):
     proxies = []
@@ -74,16 +64,6 @@ def load_proxies(filepath):
         for line in f:
             proxies.append(line)
     return proxies
-
-def show_proxies(count, types=['HTTP', 'HTTPS']):
-    proxies = asyncio.Queue()
-    broker = Broker(proxies)
-    tasks = asyncio.gather(
-        broker.find(types=types, limit=count),
-        show_proxies_helper(proxies))
-
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(tasks)
 
 def create_path_if_not_exists(path):
     if not os.path.exists(path):
