@@ -1,5 +1,5 @@
 import logging
-from typing import List
+from typing import Dict, List, Tuple
 
 class ProxyManager:
     """Keeps track of the current proxies and how well they're performing."""
@@ -26,12 +26,12 @@ class ProxyManager:
     def set_proxies(self, proxies: List[str]):
         # Proxy dictionary:
         # dict[key = proxy url] = tuple of (positive_feedback, negative_feedback, delta_feedback)
-        self.proxy_dictionary = {}
+        self.proxy_dictionary: Dict[str, Tuple[int, int, int]] = {}
         for proxy in proxies:
             self.proxy_dictionary[proxy] = (0, 0, 0)
-        self.recently_failed_proxies = []
+        self.recently_failed_proxies: List[str] = []
 
-    def get_filtered_proxy_dictionary(self, excluded_list: List[str]) -> List[str]:
+    def get_filtered_proxy_dictionary(self, excluded_list: List[str]) -> Dict[str, Tuple[int, int, int]]:
         filtered_dictionary = dict()
         # Iterate over all the items in dictionary
         for (key, value) in self.proxy_dictionary.items():
