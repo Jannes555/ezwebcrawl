@@ -1,7 +1,7 @@
 import asyncio
 import aiohttp
 import logging
-from typing import Any, Optional, Tuple
+from typing import Any, List, Optional, Tuple
 
 from .proxy_manager import ProxyManager
 
@@ -10,7 +10,7 @@ class Downloader:
         self.proxy_file_path = proxy_file_path
         self.proxy_manager = ProxyManager.from_file(proxy_file_path)
 
-    async def download_pages(self, urls: list[str], output_paths: list[str], decode = True):
+    async def download_pages(self, urls: List[str], output_paths: List[str], decode = True):
         """Downloads the pages in urls and saves them to the files in output_paths.
         Use decode = False for non-text content (e.g. images)
         """
