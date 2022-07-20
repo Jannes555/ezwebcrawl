@@ -7,7 +7,7 @@ class TestDownloader:
    
     @classmethod
     def setup_class(cls):
-        cls.proxy_file_location = "data/proxies.txt"
+        cls.proxy_file_location = "temp_proxies.txt"
         find_proxies(10, cls.proxy_file_location, ['HTTP'])
 
     @classmethod
