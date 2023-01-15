@@ -5,23 +5,22 @@ from typing import Any, List, Optional, Tuple
 
 from .proxy_manager import ProxyManager
 
-
 class Downloader:
     def __init__(self, proxy_file_path: str):
         self.proxy_file_path = proxy_file_path
         self.proxy_manager = ProxyManager.from_file(proxy_file_path)
 
-    async def download_pages(self, urls: List[str], output_paths: List[str], decode=True):
+    async def download_pages(self, urls: List[str], output_paths: List[str], decode = True):
         """Downloads the pages in urls and saves them to the files in output_paths.
         Use decode = False for non-text content (e.g. images)
         """
-        tasks = [self.__fetch(url, output_path, decode)
-                 for url, output_path in zip(urls, output_paths)]
+        tasks = [self.__fetch(url, output_path, decode) for url, output_path in zip(urls, output_paths)]
         for task in asyncio.as_completed(tasks):
             url, content = await task
             logging.debug(f'Done! url: {url}; content: {content}')
 
-    async def __fetch(self, url: str, output_path: str, decode=True) -> Tuple[str, Any]:
+
+    async def __fetch(self, url: str, output_path: str, decode = True) -> Tuple[str, Any]:
         retries: int = 10
         response: Optional[bytes] = None
         for i in range(retries):
@@ -55,4 +54,4 @@ class Downloader:
                 continue
             if response is not None:
                 return (url, response)
-        return (url, "")  # Couldn't download the page within the nr of retries
+        return (url,"") # Couldn't download the page within the nr of retries
