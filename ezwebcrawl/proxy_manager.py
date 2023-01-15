@@ -1,20 +1,20 @@
 import logging
 from typing import Dict, List, Tuple
 
+
 class ProxyManager:
     """Keeps track of the current proxies and how well they're performing."""
 
     @classmethod
     def from_file(cls, file_path: str):
-        return ProxyManager(file_path = file_path)
+        return ProxyManager(file_path=file_path)
 
     @classmethod
     def from_list(cls, proxies_list: List[str]):
-        return ProxyManager(proxies_list = proxies_list)
-
+        return ProxyManager(proxies_list=proxies_list)
 
     def __init__(self, *args, **kwargs):
-        self.initial_proxy_list = kwargs.get("proxies_list",[])
+        self.initial_proxy_list = kwargs.get("proxies_list", [])
         self.proxy_file_path = kwargs.get("file_path", "")
 
         # Set the proxies
@@ -42,11 +42,13 @@ class ProxyManager:
 
     def get_proxy(self) -> str:
         # Filter out recently failed proxies
-        filtered_proxy_dictionary = self.get_filtered_proxy_dictionary(self.recently_failed_proxies)
+        filtered_proxy_dictionary = self.get_filtered_proxy_dictionary(
+            self.recently_failed_proxies)
 
         # Maximize the delta
-        best_proxy = max(filtered_proxy_dictionary.items(), key=lambda x: x[1][2])[0]
-        
+        best_proxy = max(filtered_proxy_dictionary.items(),
+                         key=lambda x: x[1][2])[0]
+
         return best_proxy
 
     def proxy_feedback(self, proxy, was_good):
@@ -59,10 +61,10 @@ class ProxyManager:
             self.recently_failed_proxies.append(proxy)
             max_length = len(self.proxy_dictionary) - 2
             if len(self.recently_failed_proxies) > max_length:
-                self.recently_failed_proxies.remove(self.recently_failed_proxies[max_length - 1])
+                self.recently_failed_proxies.remove(
+                    self.recently_failed_proxies[max_length - 1])
         self.proxy_dictionary[proxy] = new
         logging.debug(f"Dictionary after: {self.proxy_dictionary}")
-
 
     def load_proxies_from_file(self, path: str) -> List[str]:
         """
